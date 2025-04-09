@@ -1,0 +1,178 @@
+/* Poppins Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color:rgb(81, 40, 43);
+}
+
+a{
+  text-decoration: none;
+}
+a:hover{
+  cursor: pointer;
+}
+
+.hero-section {
+  background-image: url('/public/images/bg-2.png');
+  background-size: cover;
+  background-position: center;
+  min-height: 90vh;
+  padding: 60px 20px;
+  text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-section h1 {
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.hero-section .delight {
+  color: rgb(117, 57, 61);
+}
+
+.hero-text{
+  background-color: rgb(255, 228, 221);
+  border-radius: 50px;
+  padding:50px;
+}
+
+
+
+.signature-section {
+  width: 100%;
+  background-color: rgb(255, 228, 221);
+  padding: 60px 0;
+}
+
+.signature-section h2{
+  color:rgb(148, 76, 81);
+  font-weight: 900;
+}
+.card{
+  --bs-card-bg:rgb(252, 242, 238);
+}
+.card img {
+  height: 200px;
+  object-fit: cover;
+}
+
+footer {
+  background-color: #f8f9fa;
+  font-size: 0.9rem;
+} 
+
+.btn{
+  border-radius: 30px;
+  padding:17px;
+  font-weight: 800;
+  --bs-btn-border-width:2px;
+}
+
+.btn-primary{
+  --bs-btn-bg:rgb(81, 40, 43);
+  --bs-btn-border-color:rgb(81, 40, 43);
+  --bs-btn-hover-bg:rgb(227, 146, 155);
+  --bs-btn-hover-border-color:rgb(227, 146, 155);
+  --bs-btn-active-bg:rgb(227, 146, 155);
+  --bs-btn-active-border-color:rgb(227, 146, 155);
+}
+
+.btn-outline-primary{
+  --bs-btn-color:rgb(81, 40, 43);
+  --bs-btn-border-color:rgb(81, 40, 43);
+  --bs-btn-hover-color: rgb(227, 146, 155);
+  --bs-btn-hover-bg:rgba(81, 40, 43, 0);
+  --bs-btn-hover-border-color:rgb(227, 146, 155);
+  --bs-btn-active-color: rgb(227, 146, 155);
+  --bs-btn-active-bg: rgba(81, 40, 43, 0);
+  --bs-btn-active-border-color: rgb(227, 146, 155);
+}
+
+.hero-section .btn{
+  border-radius: 20px;
+}
+.hero-section .btn-primary{
+  --bs-btn-bg: rgb(239, 158, 167);
+  --bs-btn-border-color: white;
+  --bs-btn-hover-color: white;
+  --bs-btn-hover-bg:rgb(88, 208, 224);
+  --bs-btn-hover-border-color:white;
+  --bs-btn-active-color: white;
+  --bs-btn-active-bg: rgb(88, 208, 224);
+  --bs-btn-active-border-color: white;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.navbar-nav{
+  --bs-nav-link-color: rgb(81, 40, 43);;
+  --bs-nav-link-hover-color: rgb(227, 146, 155);;
+}
+.nav-link{
+  position: relative;
+}
+.nav-link::before{
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(227, 146, 155);
+  transform-origin: center;
+  transform: translate(-50%, 0) scaleX(0);
+  transition: transform 0.3s ease-in-out;
+}
+.nav-link:hover::before{
+  transform: translate(-50%, 0) scaleX(1);
+}
+
+.card img{
+  height:300px;
+}
+
+footer{
+  background-color: rgb(239, 158, 167);
+}
+
+
+.login-container {
+  background-image: url('/public/images/bg-2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  background-color: #fff3f0;
+}
+
+.login-box {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.icon-circle {
+  background-color: white;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(81, 40, 43); /* icon color */
+  font-size: 1.4rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.icon-circle:hover {
+  background-color: rgb(227, 146, 155);
+  color: white;
+}
+
