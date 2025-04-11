@@ -10,6 +10,7 @@ import {
 } from 'react-router-dom';
 import LoginPage from './Login';
 import SignupPage from './Signup';
+import ReservationPage from './Reservation';
 
 function Home() {
   return (
@@ -26,7 +27,7 @@ function Home() {
               <li className="nav-item px-3"><a className="nav-link" href="#menu">Menu</a></li>
               <li className="nav-item px-3"><a className="nav-link" href="#locations">Locations</a></li>
               <li className="nav-item px-3"><a className="nav-link" href="#order">Order</a></li>
-              <li className="nav-item px-3"><a className="nav-link" href="#reservations">Reservations</a></li>
+              <Link to="/reservation" className="nav-item px-3"><a className="nav-link" href="#reservations">Reservations</a></Link>
               <li className="nav-item px-3"><a className="nav-link" href="#about">About Us</a></li>
             </ul>
           </div>
@@ -44,7 +45,7 @@ function Home() {
           <h1><span className="delight">Savor the Taste</span> of Every Bite!</h1>
           <p>Delicious food, easy online ordering, and hassle-free reservations.</p>
           <button className="hero-button btn btn-primary me-2">ORDER NOW</button>
-          <button className="hero-button btn btn-primary">RESERVE A TABLE</button>
+          <Link to="/reservation" className="hero-button btn btn-primary">RESERVE A TABLE</Link>
           
         </div>
       </header>
@@ -92,6 +93,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/reservation" element={<ReservationPage />} />
       </Routes>
     </Router>
   );

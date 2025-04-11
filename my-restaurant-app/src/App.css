@@ -176,3 +176,15 @@ footer{
   color: white;
 }
 
+.reservation-section {
+  background-image: url('/public/images/bg-2.png');
+  background-size: cover;
+  background-position: center;
+  min-height: 90vh;
+  padding: 60px 20px;
+}
+
+.reservation-box{
+  background-color: rgb(255, 228, 221);
+  border-radius: 50px;
+}
