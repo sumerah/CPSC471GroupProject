@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Create MySQL connection
+//Create MySQL connection to restaurant database
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -22,7 +22,7 @@ db.connect((err) => {
   console.log('Connected to MySQL');
 });
 
-// Signup
+//Signup
 app.post('/api/signup', async (req, res) => {
   const { firstName, lastName, email, phone, password } = req.body;
 
@@ -69,6 +69,18 @@ app.post('/api/login', (req, res) => {
 
     // ✅ Success
     res.status(200).json({ success: true, message: 'Login successful', userId: user.CustomerID });
+  });
+});
+
+//Menu
+app.get('/api/menu', (req, res) => {
+  const sql = 'SELECT * FROM MenuItems';
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Menu fetch error:', err);
+      return res.status(500).send('Database error');
+    }
+    res.json(results);
   });
 });
 
