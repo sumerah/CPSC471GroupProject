@@ -27,6 +27,7 @@ function LoginPage() {
     try {
       const response = await axios.post('http://localhost:5000/api/login', formData);
       console.log('Login successful:', response.data);
+      localStorage.setItem('userId', response.data.userId);
       alert('Login successful!');
     } catch (error) {
       console.error('Login failed:', error);

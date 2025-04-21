@@ -8,7 +8,7 @@ import Footer from './Footer';
 function MenuPage(){
     useEffect(() => {
         document.title = 'Menu | Bakery';
-      }, []);
+    }, []);
 
     const [items, setItems] = useState([]);
 

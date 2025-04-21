@@ -84,6 +84,19 @@ app.get('/api/menu', (req, res) => {
   });
 });
 
+//Reservation
+app.post('/api/reservations', (req, res) => {
+  const { userId, date, time, guests, requests } = req.body;
+  const sql = 'INSERT INTO Reservations (CustomerID, ReservationDate, ReservationTime, NumberOfGuests) VALUES (?, ?, ?, ?)';
+  db.query(sql, [userId, date, time, guests], (err, result) => {
+    if (err) {
+      console.error('Insert reservation error:', err);
+      return res.status(500).send('Database error');
+    }
+    res.status(200).json({ success: true });
+  });
+});
+
 app.listen(5000, () => {
   console.log('Server running on port 5000');
 });

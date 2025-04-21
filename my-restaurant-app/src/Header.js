@@ -1,7 +1,21 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    setIsLoggedIn(!!userId);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('userId');
+    setIsLoggedIn(false);
+    navigate('/');
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm py-3">
       <div className="container">
@@ -14,14 +28,29 @@ function Header() {
             <li className="nav-item px-3"><Link className="nav-link" to="/menu">Menu</Link></li>
             <li className="nav-item px-3"><a className="nav-link" href="#locations">Locations</a></li>
             <li className="nav-item px-3"><a className="nav-link" href="#order">Order</a></li>
-            <Link to="/reservation" className="nav-item px-3"><a className="nav-link" href="#reservations">Reservations</a></Link>
+            <li className="nav-item px-3"><Link className="nav-link" to="/reservation">Reservations</Link></li>
             <li className="nav-item px-3"><a className="nav-link" href="#about">About Us</a></li>
           </ul>
         </div>
         <div className="d-flex align-items-center">
-          <Link to="/login" className="btn btn-primary me-2">LOG IN</Link>
-          <Link to="/signup" className="btn btn-outline-primary me-3">SIGN UP</Link>
-          <a href="#cart" className="text-dark fs-5">
+          {!isLoggedIn ? (
+            <>
+              <Link to="/login" className="btn btn-primary me-2">LOG IN</Link>
+              <Link to="/signup" className="btn btn-outline-primary me-3">SIGN UP</Link>
+            </>
+          ) : (
+            <div className="dropdown">
+              <button className="btn btn-outline-secondary dropdown-toggle" type="button" id="profileMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                <i className="fas fa-user" style={{ color: 'rgb(81, 40, 43)' }}></i>
+              </button>
+              <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="profileMenu">
+                <li><button className="dropdown-item" onClick={() => alert('Profile settings coming soon!')}>Profile Settings</button></li>
+                <li><hr className="dropdown-divider" /></li>
+                <li><button className="dropdown-item" onClick={handleLogout}>Log Out</button></li>
+              </ul>
+            </div>
+          )}
+          <a href="#cart" className="text-dark fs-5 ms-3">
             <i className="fas fa-shopping-cart" style={{ color: 'rgb(81, 40, 43)' }}></i>
           </a>
         </div>
