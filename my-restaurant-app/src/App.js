@@ -11,6 +11,13 @@ import {
 import LoginPage from './Login';
 import SignupPage from './Signup';
 import ReservationPage from './Reservation';
+<<<<<<< Updated upstream
+=======
+import MenuPage from './Menu';
+import OrderPage from './Order';
+import Header from './Header';
+import Footer from './Footer';
+>>>>>>> Stashed changes
 
 function Home() {
   return (
@@ -94,6 +101,11 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/reservation" element={<ReservationPage />} />
+<<<<<<< Updated upstream
+=======
+        <Route path="/menu" element={<MenuPage />} />
+        <Route path="/order" element={<OrderPage />} />
+>>>>>>> Stashed changes
       </Routes>
     </Router>
   );

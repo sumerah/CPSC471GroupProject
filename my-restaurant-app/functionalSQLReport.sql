@@ -1,5 +1,8 @@
 /* Cpsc 471 Functional Progress Report SQL Statements
-Jiaqi Wu UCID 30172397 Dept. of Computer Science - Faculty of Science - CPSC 471
+Jiaqi Wu UCID: 30172397
+Sumerah Rowshan UCID: 30160897
+Tanvir Himel UCID: 30148868 
+Dept. of Computer Science - Faculty of Science - CPSC 471
 */
 
 -- Create Database
@@ -8,16 +11,36 @@ USE RestaurantDB;
 
 -- Adding Tables
 
+-- Users table
+CREATE TABLE Users(
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    PasswordHash VARCHAR(255) NOT NULL,
+    Role ENUM('Admin', 'Customer', 'Staff') NOT NULL DEFAULT 'Customer',
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+    
 -- Customers Table
--- This table will store the customer information
+-- This table will store the customer specific information
 CREATE TABLE Customers (
     CustomerID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT UNIQUE,
     FirstName VARCHAR(50) NOT NULL,
     LastName VARCHAR(50) NOT NULL,
-    Email VARCHAR(100) UNIQUE NOT NULL,
     PhoneNumber VARCHAR(15),
-    PasswordHash VARCHAR(255) NOT NULL,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE
+);
+
+-- Staff Table
+-- This table will store staff information
+CREATE TABLE Staff (
+    StaffID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT UNIQUE,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    PhoneNumber VARCHAR(15),
+    Role ENUM('KitchenStaff', 'FrontOfHouse') NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE
 );
 
 -- Menu Items table
@@ -68,96 +91,84 @@ CREATE TABLE Reservations (
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
 );
 
--- Staff Table
--- This table will store staff information
-CREATE TABLE Staff (
-    StaffID INT AUTO_INCREMENT PRIMARY KEY,
-    FirstName VARCHAR(50) NOT NULL,
-    LastName VARCHAR(50) NOT NULL,
-    Email VARCHAR(100) UNIQUE NOT NULL,
-    PhoneNumber VARCHAR(15),
-    Role ENUM('Admin', 'Manager', 'Waiter') NOT NULL,
-    PasswordHash VARCHAR(255) NOT NULL,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
 -- Insert sample data
-INSERT INTO Customers (FirstName, LastName, Email, PhoneNumber, PasswordHash)
-VALUES ('John', 'Doe', 'john.doe@example.com', '1234567890', 'hashedpassword123');
+INSERT INTO Users (Email, PasswordHash, Role)
+VALUES ('admin@bakery.com', '$2a$10$U4/tp0uI249ooyhbUR/NKeQOcIhGvJZ9XWV3gBCsz3yqApaq6ruTe', 'Admin');
 
-INSERT INTO MenuItems (ItemName, Description, Price, Category, ImageURL)
-VALUES ('Cheeseburger', 'A classic cheeseburger with lettuce, tomato, and cheese.', 9.99, 'Burgers', 'https://example.com/cheeseburger.jpg');
+-- INSERT INTO MenuItems (ItemName, Description, Price, Category, ImageURL)
+-- VALUES ('Cheeseburger', 'A classic cheeseburger with lettuce, tomato, and cheese.', 9.99, 'Burgers', 'https://example.com/cheeseburger.jpg');
 
-INSERT INTO Orders (CustomerID, TotalAmount, Status)
-VALUES (1, 19.98, 'Pending');
+-- INSERT INTO Orders (UserID, TotalAmount, Status)
+-- VALUES (1, 19.98, 'Pending');
 
-INSERT INTO OrderDetails (OrderID, ItemID, Quantity, Price)
-VALUES (1, 1, 2, 9.99);
+-- INSERT INTO OrderDetails (OrderID, ItemID, Quantity, Price)
+-- VALUES (1, 1, 2, 9.99);
 
-INSERT INTO Reservations (CustomerID, ReservationDate, ReservationTime, NumberOfGuests)
-VALUES (1, '2023-10-15', '18:00:00', 4);
+-- INSERT INTO Reservations (CustomerID, ReservationDate, ReservationTime, NumberOfGuests)
+-- VALUES (1, '2023-10-15', '18:00:00', 4);
 
-INSERT INTO Staff (FirstName, LastName, Email, PhoneNumber, Role, PasswordHash)
-VALUES ('Jane', 'Smith', 'jane.smith@example.com', '0987654321', 'Admin', 'hashedpassword456');
+-- INSERT INTO Staff (FirstName, LastName, Email, PhoneNumber, Role, PasswordHash)
+-- VALUES ('Jane', 'Smith', 'jane.smith@example.com', '0987654321', 'Admin', 'hashedpassword456');
 
--- Update Operations
+-- -- Update Operations
 
--- Update menu item price
-UPDATE MenuItems
-SET Price = 10.99
-WHERE ItemID = 1;
+-- -- Update menu item price
+-- UPDATE MenuItems
+-- SET Price = 10.99
+-- WHERE ItemID = 1;
 
--- Update order status
-UPDATE Orders
-SET Status = 'Completed'
-WHERE OrderID = 1;
+-- -- Update order status
+-- UPDATE Orders
+-- SET Status = 'Completed'
+-- WHERE OrderID = 1;
 
--- Update Reservation Status
-UPDATE Reservations
-SET Status = 'Cancelled'
-WHERE ReservationID = 1;
+-- -- Update Reservation Status
+-- UPDATE Reservations
+-- SET Status = 'Cancelled'
+-- WHERE ReservationID = 1;
 
--- Delete operations
-DELETE FROM Customers
-WHERE CustomerID = 1;
+-- -- Delete operations
+-- DELETE FROM Customers
+-- WHERE CustomerID = 1;
 
-DELETE FROM MenuItems
-WHERE ItemID = 1;
+-- DELETE FROM MenuItems
+-- WHERE ItemID = 1;
 
-DELETE FROM Orders
-WHERE OrderID = 1;
+-- DELETE FROM Orders
+-- WHERE OrderID = 1;
 
-DELETE FROM Reservations
-WHERE ReservationID = 1;
+-- DELETE FROM Reservations
+-- WHERE ReservationID = 1;
 
--- Select operations
+-- -- Select operations
 
-SELECT * FROM MenuItems;
+-- SELECT * FROM MenuItems;
 
-SELECT * FROM MenuItems;
+-- SELECT * FROM MenuItems;
 
-SELECT * FROM Reservations
-WHERE ReservationDate = '2023-10-15';
+-- SELECT * FROM Reservations
+-- WHERE ReservationDate = '2023-10-15';
 
-SELECT * FROM Staff
-WHERE Role = 'Admin';
+-- SELECT * FROM Staff
+-- WHERE Role = 'Admin';
 
--- View active reservations
-CREATE VIEW ActiveReservations AS
-SELECT ReservationID, CustomerID, ReservationDate, ReservationTime, NumberOfGuests
-FROM Reservations
-WHERE Status = 'Confirmed';
+-- -- View active reservations
+-- CREATE VIEW ActiveReservations AS
+-- SELECT ReservationID, CustomerID, ReservationDate, ReservationTime, NumberOfGuests
+-- FROM Reservations
+-- WHERE Status = 'Confirmed';
 
--- Transactions
-START TRANSACTION;
+-- -- Transactions
+-- START TRANSACTION;
 
-INSERT INTO Orders (CustomerID, TotalAmount)
-VALUES (1, 19.98);
+-- INSERT INTO Orders (CustomerID, TotalAmount)
+-- VALUES (1, 19.98);
 
-SET @lastOrderID = LAST_INSERT_ID();
+-- SET @lastOrderID = LAST_INSERT_ID();
 
-INSERT INTO OrderDetails (OrderID, ItemID, Quantity, Price)
-VALUES (@lastOrderID, 1, 2, 9.99);
+-- INSERT INTO OrderDetails (OrderID, ItemID, Quantity, Price)
+-- VALUES (@lastOrderID, 1, 2, 9.99);
 
 COMMIT;
 

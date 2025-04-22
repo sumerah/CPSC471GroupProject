@@ -188,3 +188,11 @@ footer{
   background-color: rgb(255, 228, 221);
   border-radius: 50px;
 }
+
+.dropdown-menu{
+  --bs-dropdown-link-active-bg:rgb(227, 146, 155);
+}
+
+.modal-content{
+  background-color: rgb(243, 228, 230);
+}
