@@ -28,7 +28,7 @@ function Home() {
         <div className="hero-text">
           <h1><span className="delight">Savor the Taste</span> of Every Bite!</h1>
           <p>Delicious food, easy online ordering, and hassle-free reservations.</p>
-          <button className="hero-button btn btn-primary me-2">ORDER NOW</button>
+          <Link to="/order" className="hero-button btn btn-primary me-2">ORDER NOW</Link>
           <Link to="/reservation" className="hero-button btn btn-primary">RESERVE A TABLE</Link>
           
         </div>

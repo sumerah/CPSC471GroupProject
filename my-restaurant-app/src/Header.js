@@ -15,7 +15,7 @@ function Header() {
     localStorage.removeItem('userId');
     localStorage.removeItem('role');
     setIsLoggedIn(false);
-    navigate('/');
+    navigate('/login');
   };
 
   return (

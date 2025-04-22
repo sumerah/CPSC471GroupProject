@@ -136,6 +136,30 @@ app.post('/api/menu/add', (req, res) => {
   });
 });
 
+//Edit menu item (admin)
+app.put('/api/menu/update/:id', (req, res) => {
+  const { id } = req.params;
+  const { ItemName, Description, Price, Category, ImageURL, IsAvailable } = req.body;
+
+  const sql = `UPDATE MenuItems SET 
+    ItemName = ?, 
+    Description = ?, 
+    Price = ?, 
+    Category = ?, 
+    ImageURL = ?, 
+    IsAvailable = ? 
+    WHERE ItemID = ?`;
+
+  db.query(sql, [ItemName, Description, Price, Category, ImageURL, IsAvailable, id], (err, result) => {
+    if (err) {
+      console.error('Update menu item error:', err);
+      return res.status(500).send('Database error');
+    }
+
+    res.status(200).json({ success: true });
+  });
+});
+
 
 app.listen(5000, () => {
   console.log('Server running on port 5000');

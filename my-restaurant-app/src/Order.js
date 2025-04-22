@@ -31,7 +31,7 @@ function OrderPage() {
     return (
         <div className="App">
         <Header />
-        <div className="container py-5">
+        <div className="container py-5 min-vh-100">
             {!isLoggedIn ? (
             <div className="text-center">
                 <h2>Please log in to place an order</h2>
@@ -44,7 +44,7 @@ function OrderPage() {
                 <h2 className="text-center mb-4">Place Your Order</h2>
                 <div className="row">
                 {menuItems.map((item, index) => (
-                    <div className="col-md-4 mb-4" key={index}>
+                    <div className="col-sm-6 col-md-4 col-lg-3 mb-4" key={index}>
                     <div className="card h-100">
                         <img src={item.ImageURL || '/images/placeholder.png'} className="card-img-top" alt={item.ItemName} />
                         <div className="card-body">

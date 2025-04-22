@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function LoginPage() {
   useEffect(() => {
     document.title = 'Log In | Bakery';
   }, []);
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -29,7 +31,7 @@ function LoginPage() {
       console.log('Login successful:', response.data);
       localStorage.setItem('userId', response.data.userId);
       localStorage.setItem('role', response.data.role);
-      alert('Login successful!');
+      navigate('/'); //redirect to home page after successful login
     } catch (error) {
       console.error('Login failed:', error);
       alert('Login failed. Please check your credentials.');
