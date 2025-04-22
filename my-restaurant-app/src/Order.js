@@ -26,6 +26,32 @@ function OrderPage() {
         }
     }, []);
 
+    const [cart, setCart] = useState(() => {
+        const saved = localStorage.getItem('cart');
+        return saved ? JSON.parse(saved) : {};
+    });
+    
+    const updateCart = (item, delta) => {
+        setCart(prev => {
+          const updated = JSON.parse(JSON.stringify(prev)); // full copy
+          const id = item.ItemID;
+      
+          if (!updated[id]) {
+            updated[id] = { ...item, quantity: 0 };
+          }
+          updated[id].quantity = (updated[id].quantity || 0) + delta;
+      
+          if (updated[id].quantity <= 0) {
+            delete updated[id];
+          }
+      
+          return updated;
+        });
+    };
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }, [cart]);
+
 
     return (
         <div className="App">
@@ -42,22 +68,25 @@ function OrderPage() {
             <>
                 <h2 className="text-center mb-4">Place Your Order</h2>
                 <div className="row">
-                {menuItems.map((item, index) => (
-                    <div className="col-sm-6 col-md-4 col-lg-3 mb-4" key={index}>
-                    <div className="card h-100">
-                        <img src={item.ImageURL || '/images/placeholder.png'} className="card-img-top" alt={item.ItemName} />
-                        <div className="card-body">
+                {menuItems.map((item) => {
+                    const quantity = cart[item.ItemID]?.quantity || 0;
+                    return (
+                        <div className="col-sm-6 col-md-4 col-lg-3 mb-4" key={item.ItemID}>
+                        <div className="card h-100">
+                            <img src={item.ImageURL || '/images/placeholder.png'} className="card-img-top" alt={item.ItemName} />
+                            <div className="card-body">
                             <h5 className="card-title">{item.ItemName}</h5>
                             <p className="card-text fw-bold">${parseFloat(item.Price || 0).toFixed(2)}</p>
                             <div className="d-flex justify-content-center align-items-center">
-                                <button className="btn btn-sm">-</button>
-                                <span className="mx-2">0</span>
-                                <button className="btn btn-sm">+</button>
+                                <button className="btn btn-sm" onClick={() => updateCart(item, -1)}>-</button>
+                                <span className="mx-2">{quantity}</span>
+                                <button className="btn btn-sm" onClick={() => updateCart(item, 1)}>+</button>
+                            </div>
                             </div>
                         </div>
-                    </div>
-                    </div>
-                ))}
+                        </div>
+                    );
+                })}
                 </div>
             </>
             )}
