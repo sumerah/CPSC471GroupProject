@@ -5,7 +5,7 @@ import axios from 'axios';
 import Header from './Header';
 import Footer from './Footer';
 
-function ReservationPage() {
+function ReservationPage({ cart, setCart }) {
   useEffect(() => {
       document.title = 'Make a Reservation | Bakery';
   }, []);
@@ -47,7 +47,7 @@ function ReservationPage() {
 
   return (
     <div className="App">
-      <Header />
+      <Header cartCount={Object.values(cart).reduce((sum, qty) => sum + qty, 0)} />
 
       <div className="reservation-section py-5 d-flex justify-content-center align-items-center">
         <div className="reservation-box p-5 shadow">

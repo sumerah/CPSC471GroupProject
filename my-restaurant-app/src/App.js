@@ -1,5 +1,5 @@
 // ---- App.js ----
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './App.css';
@@ -16,12 +16,14 @@ import MenuPage from './Menu';
 import Header from './Header';
 import Footer from './Footer';
 import OrderPage from './Order';
+import CartPage from './Cart';
 
-function Home() {
+
+function Home({ cart, setCart }) {
   return (
     <div className="App">
       {/* Header */}
-      <Header />
+      <Header cartCount={Object.values(cart).reduce((sum, qty) => sum + qty, 0)} />
 
       {/* Hero Section */}
       <header className="hero-section text-center text-white d-flex align-items-center justify-content-center">
@@ -62,15 +64,24 @@ function Home() {
 }
 
 function App() {
+  const [cart, setCart] = useState(() => {
+    const storedCart = localStorage.getItem('cart');
+    return storedCart ? JSON.parse(storedCart) : {};
+  });
+  
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home cart={cart} setCart={setCart} />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/reservation" element={<ReservationPage />} />
-        <Route path="/menu" element={<MenuPage />} />
-        <Route path="/order" element={<OrderPage />} />
+        <Route path="/reservation" element={<ReservationPage cart={cart} setCart={setCart}/>} />
+        <Route path="/menu" element={<MenuPage cart={cart} setCart={setCart} />} />
+        <Route path="/order" element={<OrderPage cart={cart} setCart={setCart} />} />
+        <Route path="/cart" element={<CartPage cart={cart} setCart={setCart} />} />
       </Routes>
     </Router>
   );

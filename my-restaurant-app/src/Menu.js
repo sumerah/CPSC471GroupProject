@@ -5,7 +5,7 @@ import axios from 'axios';
 import Header from './Header';
 import Footer from './Footer';
 
-function MenuPage() {
+function MenuPage({ cart, setCart }) {
   useEffect(() => {
     document.title = 'Menu | Bakery';
   }, []);
@@ -75,7 +75,7 @@ function MenuPage() {
 
   return (
     <div className="App">
-      <Header />
+      <Header cartCount={Object.values(cart).reduce((sum, qty) => sum + qty, 0)}/>
       <section className="container py-5">
         <h2 className="text-center mb-4">Our Menu</h2>
   

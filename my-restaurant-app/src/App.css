@@ -184,7 +184,7 @@ footer{
   padding: 60px 20px;
 }
 
-.reservation-box{
+.reservation-box, .order-box{
   background-color: rgb(255, 228, 221);
   border-radius: 50px;
 }
@@ -195,4 +195,13 @@ footer{
 
 .modal-content{
   background-color: rgb(243, 228, 230);
+}
+
+.order-section{
+  min-height: 90vh;
+}
+
+.badge{
+  --bs-badge-font-size:0.5em;
+  background-color: rgb(227, 146, 155);
 }
