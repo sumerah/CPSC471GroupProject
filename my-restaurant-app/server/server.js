@@ -257,6 +257,53 @@ app.post('/api/orders', async (req, res) => {
   }
 });
 
+//Get all orders for a user
+// Get all orders for a user
+app.get('/api/orders/:userId', (req, res) => {
+  const { userId } = req.params;
+
+  const sql = `
+    SELECT o.OrderID, o.OrderDate, o.Status, od.ItemID, mi.ItemName, od.Quantity, od.Price
+    FROM Orders o
+    JOIN Customers c ON o.CustomerID = c.CustomerID
+    JOIN OrderDetails od ON o.OrderID = od.OrderID
+    JOIN MenuItems mi ON od.ItemID = mi.ItemID
+    WHERE c.UserID = ?
+    ORDER BY o.OrderDate DESC
+  `;
+
+  db.query(sql, [userId], (err, results) => {
+    if (err) {
+      console.error('Order fetch error:', err);
+      return res.status(500).send('Database error');
+    }
+
+    // Group by order
+    const orders = {};
+    results.forEach(row => {
+      if (!orders[row.OrderID]) {
+        orders[row.OrderID] = {
+          orderId: row.OrderID,
+          date: row.OrderDate,
+          status: row.Status,
+          items: [],
+          total: 0
+        };
+      }
+
+      orders[row.OrderID].items.push({
+        itemId: row.ItemID,
+        itemName: row.ItemName,
+        quantity: row.Quantity,
+        price: row.Price
+      });
+
+      orders[row.OrderID].total += row.Price * row.Quantity;
+    });
+
+    res.json(Object.values(orders));
+  });
+});
 
 
 app.listen(5000, () => {

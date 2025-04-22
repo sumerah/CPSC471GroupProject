@@ -18,6 +18,7 @@ import Footer from './Footer';
 import OrderPage from './Order';
 import CartPage from './Cart';
 import CheckoutPage from './Checkout';
+import MyOrdersPage from './MyOrders';
 
 
 function Home() {
@@ -76,6 +77,7 @@ function App() {
         <Route path="/order" element={<OrderPage/>} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/my-orders" element={<MyOrdersPage />} />
       </Routes>
     </Router>
   );
