@@ -175,6 +175,88 @@ app.delete('/api/menu/delete/:id', (req, res) => {
   });
 });
 
+// Place order
+app.post('/api/orders', async (req, res) => {
+  const { userId, items } = req.body;
+  console.log(userId);
+  console.log(items);
+
+  try {
+      // First get customer ID from user ID
+      const getCustomerIdSql = 'SELECT CustomerID FROM Customers WHERE UserID = ?';
+      db.query(getCustomerIdSql, [userId], (err, customerResult) => {
+          if (err) {
+              console.error('Customer lookup error:', err);
+              return res.status(500).send('Database error');
+          }
+
+          if (customerResult.length === 0) {
+              return res.status(404).send('Customer not found');
+          }
+
+          const customerId = customerResult[0].CustomerID;
+
+          // Start transaction
+          db.beginTransaction(async (err) => {
+              if (err) {
+                  console.error('Transaction error:', err);
+                  return res.status(500).send('Database error');
+              }
+
+              try {
+                  // 1. Create the order
+                  const insertOrderSql = 'INSERT INTO Orders (CustomerID, Status) VALUES (?, ?)';
+                  db.query(insertOrderSql, [customerId, 'Pending'], (err, orderResult) => {
+                      if (err) throw err;
+
+                      const orderId = orderResult.insertId;
+                      let totalAmount = 0;
+
+                      // 2. Add order items
+                      const insertItemsPromises = items.map(item => {
+                          return new Promise((resolve, reject) => {
+                              const insertItemSql = 'INSERT INTO OrderDetails (OrderID, ItemID, Quantity, Price) VALUES (?, ?, ?, ?)';
+                              db.query(insertItemSql, [orderId, item.ItemID, item.Quantity, item.Price], (err) => {
+                                  if (err) reject(err);
+                                  totalAmount += item.Price * item.Quantity;
+                                  resolve();
+                              });
+                          });
+                      });
+
+                      Promise.all(insertItemsPromises)
+                          .then(() => {
+                            db.commit((err) => {
+                              if (err) {
+                                return db.rollback(() => {
+                                  console.error('Commit error:', err);
+                                  res.status(500).send('Database commit error');
+                                });
+                              }
+                              res.status(200).json({ success: true, orderId: orderId });
+                            });
+                          })
+                          .catch(err => {
+                            db.rollback(() => {
+                              console.error('Insert order details error:', err);
+                              res.status(500).send('Failed to insert order items');
+                            });
+                          });
+                  });
+              } catch (error) {
+                  db.rollback(() => {
+                      console.error('Order processing error:', error);
+                      res.status(500).send('Database error');
+                  });
+              }
+          });
+      });
+  } catch (error) {
+      console.error('Order processing error:', error);
+      res.status(500).send('Server error');
+  }
+});
+
 
 
 app.listen(5000, () => {

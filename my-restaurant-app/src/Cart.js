@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function CartPage() {
+  const navigate = useNavigate();
   const [cart, setCart] = useState(() => {
     const saved = localStorage.getItem('cart');
     return saved ? JSON.parse(saved) : {};
@@ -21,9 +24,9 @@ function CartPage() {
   const total = Object.values(cart).reduce((sum, item) => sum + item.Price * item.quantity, 0);
 
   return (
-    <div>
+    <div className="d-flex flex-column min-vh-100">
       <Header />
-      <div className="container py-5">
+      <div className="container py-5 flex-grow-1">
         <h2 className="mb-4">Your Cart</h2>
         {Object.keys(cart).length === 0 ? (
           <p>Your cart is empty.</p>
@@ -56,7 +59,19 @@ function CartPage() {
                 </div>
               </div>
             ))}
-            <div className="mt-4 fw-bold">Subotal: ${total.toFixed(2)}</div>
+            <div className="mt-4">
+              <div className="d-flex justify-content-between align-items-center fw-bold mb-3">
+                <span>Subtotal</span>
+                <span>${total.toFixed(2)}</span>
+              </div>
+              <div className="text-center">
+              <button className="btn btn-primary px-4"
+                onClick={() => {
+                  localStorage.setItem('checkoutInProgress', 'true');
+                  navigate('/checkout');}}>
+                Checkout</button>
+              </div>
+            </div>
           </div>
         )}
       </div>

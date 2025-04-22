@@ -62,8 +62,7 @@ CREATE TABLE Orders (
     OrderID INT AUTO_INCREMENT PRIMARY KEY,
     CustomerID INT,
     OrderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    TotalAmount DECIMAL(10, 2) NOT NULL,
-    Status ENUM('Pending', 'Processing', 'Completed', 'Cancelled') DEFAULT 'Pending',
+    Status ENUM('Pending', 'Completed', 'Cancelled') DEFAULT 'Pending',
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
 );
 
@@ -96,8 +95,11 @@ CREATE TABLE Reservations (
 INSERT INTO Users (Email, PasswordHash, Role)
 VALUES ('admin@bakery.com', '$2a$10$U4/tp0uI249ooyhbUR/NKeQOcIhGvJZ9XWV3gBCsz3yqApaq6ruTe', 'Admin');
 
--- INSERT INTO MenuItems (ItemName, Description, Price, Category, ImageURL)
--- VALUES ('Cheeseburger', 'A classic cheeseburger with lettuce, tomato, and cheese.', 9.99, 'Burgers', 'https://example.com/cheeseburger.jpg');
+INSERT INTO MenuItems (ItemName, Description, Price, Category, ImageURL)
+VALUES ('Red Velvet Cake', 'A rich and moist red velvet cake with cream cheese frosting.', 10.99, 'Cakes', 'https://i.imgur.com/HyTSrMR.jpeg');
+
+INSERT INTO MenuItems (ItemName, Description, Price, Category, ImageURL)
+VALUES ('Chocolate Chip Cookie', 'Classic cookie with rich chocolate chunks baked to golden perfection.', 2.99, 'Cookies', 'https://i.imgur.com/DC5Z3Oc.jpeg');
 
 -- INSERT INTO Orders (UserID, TotalAmount, Status)
 -- VALUES (1, 19.98, 'Pending');

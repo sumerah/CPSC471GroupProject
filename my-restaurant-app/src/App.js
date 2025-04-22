@@ -17,6 +17,7 @@ import Header from './Header';
 import Footer from './Footer';
 import OrderPage from './Order';
 import CartPage from './Cart';
+import CheckoutPage from './Checkout';
 
 
 function Home() {
@@ -74,6 +75,7 @@ function App() {
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/order" element={<OrderPage/>} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
       </Routes>
     </Router>
   );
