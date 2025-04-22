@@ -7,7 +7,7 @@ function Header({cartCount=0}) {
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
-    const role = localStorage.getItem('role');
+    //const role = localStorage.getItem('role');
     setIsLoggedIn(!!userId);
   }, []);
 

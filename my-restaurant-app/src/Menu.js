@@ -14,6 +14,7 @@ function MenuPage({ cart, setCart }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+  const [deletingItem, setDeletingItem] = useState(null);
   const [newItem, setNewItem] = useState({
     ItemName: '',
     Description: '',
@@ -71,6 +72,23 @@ function MenuPage({ cart, setCart }) {
       .catch(err => console.error('Edit menu item error:', err));
   };
 
+  const handleDelete = (item) => {
+    setDeletingItem(item);
+  };
+  
+  const handleDeleteSubmit = (e) => {
+    e.preventDefault();
+    if (!deletingItem || !deletingItem.ItemID) {
+      console.error('Invalid item to delete.');
+      return;
+    }
+    axios.delete(`http://localhost:5000/api/menu/delete/${deletingItem.ItemID}`)
+      .then(res => {
+        setItems(prev => prev.filter(it => it.ItemID !== deletingItem.ItemID));
+        setDeletingItem(null);
+      })
+      .catch(err => console.error('Delete menu item error:', err));
+  };
 
 
   return (
@@ -95,6 +113,11 @@ function MenuPage({ cart, setCart }) {
                 {isAdmin && (
                   <button className="position-absolute top-0 end-0 m-2 btn btn-sm btn-light p-2" data-bs-toggle="modal" data-bs-target="#editMenuItemModal" onClick={() => handleEdit(item)}>
                     <i className="fas fa-pencil-alt"></i>
+                  </button>
+                )}
+                {isAdmin && (
+                  <button className="position-absolute top-0 start-0 m-2 btn btn-sm btn-danger p-2" data-bs-toggle="modal" data-bs-target="#deleteMenuItemModal" onClick={() => handleDelete(item)}>
+                    <i className="fas fa-trash"></i>
                   </button>
                 )}
                 <div className="card-body">
@@ -206,6 +229,24 @@ function MenuPage({ cart, setCart }) {
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" className="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal for Deleting Menu Item */}
+      <div className="modal fade" id="deleteMenuItemModal" tabIndex="-1" aria-labelledby="deleteMenuItemModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-lg">
+          <div className="modal-content">
+            <form onSubmit={handleDeleteSubmit}>
+              <div className="modal-header">
+                <h5 className="modal-title" id="deleteMenuItemModalLabel">Are you sure you want to delete this item?</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" className="btn btn-primary bg-danger">Delete</button>
               </div>
             </form>
           </div>

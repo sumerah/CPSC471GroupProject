@@ -160,6 +160,22 @@ app.put('/api/menu/update/:id', (req, res) => {
   });
 });
 
+//Delete menu item (admin)
+app.delete('/api/menu/delete/:id', (req, res) => {
+  const { id } = req.params;
+
+  const sql = 'DELETE FROM MenuItems WHERE ItemID = ?';
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error('Delete menu item error:', err);
+      return res.status(500).send('Database error');
+    }
+
+    res.status(200).json({ success: true });
+  });
+});
+
+
 
 app.listen(5000, () => {
   console.log('Server running on port 5000');
