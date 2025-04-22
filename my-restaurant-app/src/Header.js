@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-function Header({cartCount=0}) {
+function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
@@ -14,7 +14,6 @@ function Header({cartCount=0}) {
   const handleLogout = () => {
     localStorage.removeItem('userId');
     localStorage.removeItem('role');
-    localStorage.removeItem('cart');
     localStorage.clear();
     setIsLoggedIn(false);
     navigate('/login');
@@ -57,11 +56,11 @@ function Header({cartCount=0}) {
           {isLoggedIn && (
             <Link to="/cart" className="text-dark fs-5 ms-3 position-relative">
               <i className="fas fa-shopping-cart" style={{ color: 'rgb(81, 40, 43)' }}></i>
-              {cartCount >= 0 && (
+              {/* {cartCount >= 0 && (
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill">
                   {cartCount}
                 </span>
-              )} 
+              )}  */}
             </Link>
           )}
         </div>

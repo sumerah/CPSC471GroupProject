@@ -5,7 +5,7 @@ import axios from 'axios';
 import Header from './Header';
 import Footer from './Footer';
 
-function OrderPage({ cart, setCart }) {
+function OrderPage() {
     //Setting page title
     useEffect(() => {
         document.title = 'Place an Order | Bakery';
@@ -26,30 +26,10 @@ function OrderPage({ cart, setCart }) {
         }
     }, []);
 
-    const handleIncrease = (itemId) => {
-        setCart(prevCart => ({
-            ...prevCart,
-            [itemId]: (prevCart[itemId] || 0) + 1
-        }));
-    };
-
-    const handleDecrease = (itemId) => {
-        setCart(prevCart => {
-            const newCount = (prevCart[itemId] || 0) - 1;
-            if (newCount <= 0) {
-                const { [itemId]: _, ...rest } = prevCart;
-                return rest;
-            }
-            return {
-                ...prevCart,
-                [itemId]: newCount
-            };
-        });
-    };
 
     return (
         <div className="App">
-        <Header cartCount={Object.values(cart).reduce((sum, qty) => sum + qty, 0)}/>
+        <Header/>
         <div className="container py-5 order-section">
             {!isLoggedIn ? (
             <div className="text-center order-box p-5 shadow">
@@ -70,9 +50,9 @@ function OrderPage({ cart, setCart }) {
                             <h5 className="card-title">{item.ItemName}</h5>
                             <p className="card-text fw-bold">${parseFloat(item.Price || 0).toFixed(2)}</p>
                             <div className="d-flex justify-content-center align-items-center">
-                                <button className="btn btn-sm" onClick={() => handleDecrease(item.ItemID)}>-</button>
-                                <span className="mx-2">{cart[item.ItemID] || 0}</span>
-                                <button className="btn btn-sm" onClick={() => handleIncrease(item.ItemID)}>+</button>
+                                <button className="btn btn-sm">-</button>
+                                <span className="mx-2">0</span>
+                                <button className="btn btn-sm">+</button>
                             </div>
                         </div>
                     </div>

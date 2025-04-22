@@ -4,7 +4,7 @@ import Header from './Header';
 import Footer from './Footer';
 import axios from 'axios';
 
-function CartPage({ cart, setCart }) {
+function CartPage() {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
@@ -58,7 +58,7 @@ function CartPage({ cart, setCart }) {
 
   return (
     <div className="App">
-      <Header cartCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)} />
+      <Header />
       <div className="container py-5">
         <h2 className="text-center mb-4">Your Cart</h2>
         {cartItems.length === 0 ? (
