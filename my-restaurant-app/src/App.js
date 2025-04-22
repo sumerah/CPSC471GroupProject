@@ -15,6 +15,7 @@ import ReservationPage from './Reservation';
 import MenuPage from './Menu';
 import Header from './Header';
 import Footer from './Footer';
+import OrderPage from './Order';
 
 function Home() {
   return (
@@ -69,6 +70,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/reservation" element={<ReservationPage />} />
         <Route path="/menu" element={<MenuPage />} />
+        <Route path="/order" element={<OrderPage />} />
       </Routes>
     </Router>
   );

@@ -13,6 +13,7 @@ function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem('userId');
+    localStorage.removeItem('role');
     setIsLoggedIn(false);
     navigate('/');
   };

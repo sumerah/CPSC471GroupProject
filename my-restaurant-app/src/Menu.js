@@ -106,22 +106,10 @@ function MenuPage() {
                     </div>
                     <div className="col-md-6">
                       <input
-                        type="text"
-                        className="form-control"
-                        name="Category"
-                        placeholder="Category"
-                        value={newItem.Category}
-                        onChange={handleInputChange}
-                      />
+                        type="text" className="form-control" name="Category" placeholder="Category" value={newItem.Category} onChange={handleInputChange}/>
                     </div>
                     <div className="col-12">
-                      <textarea
-                        className="form-control"
-                        name="Description"
-                        placeholder="Description"
-                        value={newItem.Description}
-                        onChange={handleInputChange}
-                      />
+                      <textarea className="form-control" name="Description" placeholder="Description" value={newItem.Description} onChange={handleInputChange}/>
                     </div>
                     <div className="col-md-6">
                       <input
@@ -136,40 +124,19 @@ function MenuPage() {
                       />
                     </div>
                     <div className="col-md-6">
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="ImageURL"
-                        placeholder="Image URL"
-                        value={newItem.ImageURL}
-                        onChange={handleInputChange}
-                      />
+                      <input type="text" className="form-control" name="ImageURL" placeholder="Image URL" value={newItem.ImageURL} onChange={handleInputChange}/>
                     </div>
                     <div className="col-12">
                       <label className="form-check-label me-3">
-                        <input
-                          type="checkbox"
-                          className="form-check-input me-2"
-                          name="IsAvailable"
-                          checked={newItem.IsAvailable}
-                          onChange={handleInputChange}
-                        />
+                        <input type="checkbox" className="form-check-input me-2" name="IsAvailable" checked={newItem.IsAvailable} onChange={handleInputChange}/>
                         Available
                       </label>
                     </div>
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn btn-primary">
-                    Add Item
-                  </button>
+                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" className="btn btn-primary">Add Item</button>
                 </div>
               </form>
             </div>
