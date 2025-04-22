@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-function Header({cartCount=0}) {
+function Header({ cartCount = 0 }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
-    const role = localStorage.getItem('role');
+    const storedRole = localStorage.getItem('role');
     setIsLoggedIn(!!userId);
+    setRole(storedRole);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('userId');
-    localStorage.removeItem('role');
-    localStorage.removeItem('cart');
     localStorage.clear();
     setIsLoggedIn(false);
+    setRole(null);
     navigate('/login');
   };
 
@@ -30,12 +30,32 @@ function Header({cartCount=0}) {
         <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item px-3"><Link className="nav-link" to="/menu">Menu</Link></li>
-            <li className="nav-item px-3"><a className="nav-link" href="#locations">Locations</a></li>
+
+            {/* Locations Dropdown */}
+            <li className="nav-item dropdown px-3">
+              <a className="nav-link dropdown-toggle" href="#" id="locationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Locations
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="locationsDropdown">
+                <li><a className="dropdown-item" href="#sunridge">Sunridge Mall</a></li>
+                <li><a className="dropdown-item" href="#kensington">Kensington</a></li>
+                <li><a className="dropdown-item" href="#chinook">Chinook Centre</a></li>
+              </ul>
+            </li>
+
             <li className="nav-item px-3"><Link className="nav-link" to="/order">Order</Link></li>
             <li className="nav-item px-3"><Link className="nav-link" to="/reservation">Reservations</Link></li>
             <li className="nav-item px-3"><a className="nav-link" href="#about">About Us</a></li>
+
+            {/* Staff tab visible only to admin */}
+            {role === 'admin' && (
+              <li className="nav-item px-3">
+                <Link className="nav-link" to="/staff">Staff</Link>
+              </li>
+            )}
           </ul>
         </div>
+
         <div className="d-flex align-items-center">
           {!isLoggedIn ? (
             <>
@@ -61,7 +81,7 @@ function Header({cartCount=0}) {
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill">
                   {cartCount}
                 </span>
-              )} 
+              )}
             </Link>
           )}
         </div>
