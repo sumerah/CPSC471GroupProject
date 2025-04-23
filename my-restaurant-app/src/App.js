@@ -20,9 +20,13 @@ import CartPage from './Cart';
 import CheckoutPage from './Checkout';
 import MyOrdersPage from './MyOrders';
 import StaffPage from './Staff';
+import ProfilePage from './Profile';
 
 
 function Home() {
+  useEffect(() => {
+      document.title = 'Bakery';
+  }, []);
   return (
     <div className="App">
       {/* Header */}
@@ -80,6 +84,7 @@ function App() {
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/my-orders" element={<MyOrdersPage />} />
         <Route path="/staff" element={<StaffPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   );

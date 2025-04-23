@@ -355,12 +355,125 @@ app.put('/api/staff/:staffId', (req, res) => {
 // Delete staff by ID(admin)
 app.delete('/api/staff/:staffId', (req, res) => {
   const { staffId } = req.params;
-  db.query('DELETE FROM Staff WHERE StaffID = ?', [staffId], (err) => {
-    if (err) return res.status(500).send('Delete error');
-    res.status(200).json({ success: true });
+
+  // Get UserID associated with the StaffID
+  const getUserSql = 'SELECT UserID FROM Staff WHERE StaffID = ?';
+  db.query(getUserSql, [staffId], (err, result) => {
+    if (err || result.length === 0) {
+      return res.status(500).send('Failed to find staff');
+    }
+
+    const userId = result[0].UserID;
+
+    // Delete from Users (which will cascade to Staff)
+    const deleteUserSql = 'DELETE FROM Users WHERE UserID = ?';
+    db.query(deleteUserSql, [userId], (err) => {
+      if (err) {
+        return res.status(500).send('Failed to delete user');
+      }
+
+      res.status(200).json({ success: true });
+    });
   });
 });
 
+// Get current user profile
+app.get('/api/users/:userId', (req, res) => {
+  const { userId } = req.params;
+
+  // Get user role first
+  db.query('SELECT Role, Email FROM Users WHERE UserID = ?', [userId], (err, userResult) => {
+    if (err || userResult.length === 0) {
+      console.error('User lookup error:', err);
+      return res.status(500).send('User not found');
+    }
+
+    const { Role, Email } = userResult[0];
+
+    if (Role === 'Customer') {
+      // Get details from Customers table
+      const customerSql = 'SELECT FirstName, LastName, PhoneNumber FROM Customers WHERE UserID = ?';
+      db.query(customerSql, [userId], (err, custResult) => {
+        if (err || custResult.length === 0) {
+          console.error('Customer lookup error:', err);
+          return res.status(500).send('Customer not found');
+        }
+
+        res.json({
+          email: Email,
+          firstName: custResult[0].FirstName,
+          lastName: custResult[0].LastName,
+          phone: custResult[0].PhoneNumber
+        });
+      });
+
+    } else if (Role === 'Staff') {
+      const staffSql = 'SELECT FirstName, LastName, PhoneNumber FROM Staff WHERE UserID = ?';
+      db.query(staffSql, [userId], (err, staffResult) => {
+        if (err || staffResult.length === 0) {
+          console.error('Staff lookup error:', err);
+          return res.status(500).send('Staff not found');
+        }
+
+        res.json({
+          email: Email,
+          firstName: staffResult[0].FirstName,
+          lastName: staffResult[0].LastName,
+          phone: staffResult[0].PhoneNumber
+        });
+      });
+
+    } else {
+      // Admin only has Email in Users table
+      res.json({
+        email: Email,
+        firstName: '',
+        lastName: '',
+        phone: ''
+      });
+    }
+  });
+});
+
+// Update user profile
+app.put('/api/users/:userId', (req, res) => {
+  const { userId } = req.params;
+  const { firstName, lastName, email, phone, password } = req.body;
+
+  const updateUser = () => {
+    const userUpdates = ['Email = ?'];
+    const userValues = [email];
+
+    if (password) {
+      bcrypt.hash(password, 10, (err, hash) => {
+        if (err) return res.status(500).send('Failed to hash password');
+        userUpdates.push('PasswordHash = ?');
+        userValues.push(hash);
+        finalizeUserUpdate();
+      });
+    } else {
+      finalizeUserUpdate();
+    }
+
+    function finalizeUserUpdate() {
+      const sql = `UPDATE Users SET ${userUpdates.join(', ')} WHERE UserID = ?`;
+      db.query(sql, [...userValues, userId], (err) => {
+        if (err) return res.status(500).send('Failed to update user');
+        updateCustomer();
+      });
+    }
+  };
+
+  const updateCustomer = () => {
+    const sql = `UPDATE Customers SET FirstName = ?, LastName = ?, PhoneNumber = ? WHERE UserID = ?`;
+    db.query(sql, [firstName, lastName, phone, userId], (err) => {
+      if (err) return res.status(500).send('Failed to update customer');
+      res.status(200).json({ success: true });
+    });
+  };
+
+  updateUser();
+});
 
 app.listen(5000, () => {
   console.log('Server running on port 5000');

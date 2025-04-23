@@ -59,7 +59,7 @@ function Header() {
                 <i className="fas fa-user" style={{ color: 'rgb(81, 40, 43)' }}></i>
               </button>
               <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="profileMenu">
-                <li><button className="dropdown-item" onClick={() => alert('Profile settings coming soon!')}>Profile Settings</button></li>
+                <li><Link className="dropdown-item" to="/profile">Profile Settings</Link></li>
                 <li><hr className="dropdown-divider" /></li>
                 <li><button className="dropdown-item" onClick={handleLogout}>Log Out</button></li>
               </ul>

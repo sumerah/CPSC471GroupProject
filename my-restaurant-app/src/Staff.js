@@ -10,6 +10,9 @@ function StaffPage() {
       window.location.href = '/'; // redirect to home if not admin
     }
   }, [role]);
+  useEffect(() => {
+    document.title = 'Staff | Bakery';
+  }, []);
   const [staffList, setStaffList] = useState([]);
   const [editingStaff, setEditingStaff] = useState(null);
   const [editFormData, setEditFormData] = useState({
@@ -163,6 +166,26 @@ function StaffPage() {
                     <option value="FrontOfHouse">Front of House</option>
                   </select>
                   <button type="submit" className="btn btn-primary w-100">Save Changes</button>
+                  <button
+                    type="button"
+                    className="btn btn-danger w-100 mt-2"
+                    onClick={() => {
+                        if (window.confirm('Are you sure you want to delete this staff member?')) {
+                        axios.delete(`http://localhost:5000/api/staff/${editingStaff.StaffID}`)
+                            .then(() => axios.get('http://localhost:5000/api/staff'))
+                            .then(res => {
+                            setStaffList(res.data);
+                            setEditingStaff(null);
+                            })
+                            .catch(err => {
+                            console.error('Failed to delete staff:', err);
+                            alert('Failed to delete staff.');
+                            });
+                        }
+                    }}
+                    >
+                    Delete Staff Member
+                </button>
                 </form>
               </div>
             </div>
