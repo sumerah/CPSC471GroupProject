@@ -209,3 +209,13 @@ footer{
 .spinner-border{
   color:rgb(227, 146, 155) !important;
 }
+
+td{
+  vertical-align: middle;
+}
+th{
+  background-color: rgb(243, 228, 230) !important;
+}
+.table{
+  --bs-table-hover-bg: rgba(243, 228, 230, 0);
+}

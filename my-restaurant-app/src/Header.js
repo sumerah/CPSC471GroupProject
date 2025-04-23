@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
-    //const role = localStorage.getItem('role');
+    const role = localStorage.getItem('role');
     setIsLoggedIn(!!userId);
+    setUserRole(role);
   }, []);
 
   const handleLogout = () => {
@@ -32,9 +34,14 @@ function Header() {
             <li className="nav-item px-3"><a className="nav-link" href="#locations">Locations</a></li>
             <li className="nav-item px-3"><Link className="nav-link" to="/order">Order</Link></li>
             <li className="nav-item px-3"><Link className="nav-link" to="/reservation">Reservations</Link></li>
-            {isLoggedIn && (
+            {isLoggedIn && userRole === 'Customer' && (
               <li className="nav-item px-3">
                 <Link className="nav-link" to="/my-orders">My Orders</Link>
+              </li>
+            )}
+            {isLoggedIn && userRole === 'Admin' && (
+              <li className="nav-item px-3">
+                <Link className="nav-link" to="/staff">Staff</Link>
               </li>
             )}
             <li className="nav-item px-3"><a className="nav-link" href="#about">About Us</a></li>

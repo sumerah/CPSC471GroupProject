@@ -19,6 +19,7 @@ import OrderPage from './Order';
 import CartPage from './Cart';
 import CheckoutPage from './Checkout';
 import MyOrdersPage from './MyOrders';
+import StaffPage from './Staff';
 
 
 function Home() {
@@ -78,6 +79,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/my-orders" element={<MyOrdersPage />} />
+        <Route path="/staff" element={<StaffPage />} />
       </Routes>
     </Router>
   );

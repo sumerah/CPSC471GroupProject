@@ -258,7 +258,6 @@ app.post('/api/orders', async (req, res) => {
 });
 
 //Get all orders for a user
-// Get all orders for a user
 app.get('/api/orders/:userId', (req, res) => {
   const { userId } = req.params;
 
@@ -302,6 +301,63 @@ app.get('/api/orders/:userId', (req, res) => {
     });
 
     res.json(Object.values(orders));
+  });
+});
+
+// Get all staff (admin)
+app.get('/api/staff', (req, res) => {
+  const sql = `
+    SELECT s.StaffID, s.FirstName, s.LastName, u.Email, s.PhoneNumber, s.Role
+    FROM Staff s
+    JOIN Users u ON s.UserID = u.UserID
+  `;
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Fetch staff error:', err);
+      return res.status(500).send('Database error');
+    }
+    res.json(results);
+  });
+});
+
+// Add staff(admin)
+app.post('/api/staff', (req, res) => {
+  const { email, password, firstName, lastName, phone, role } = req.body;
+
+  const insertUser = 'INSERT INTO Users (Email, PasswordHash, Role) VALUES (?, ?, ?)';
+  const insertStaff = 'INSERT INTO Staff (UserID, FirstName, LastName, PhoneNumber, Role) VALUES (?, ?, ?, ?, ?)';
+
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) return res.status(500).send('Password hash error');
+
+    db.query(insertUser, [email, hash, 'Staff'], (err, result) => {
+      if (err) return res.status(500).send('User insert error');
+      const userId = result.insertId;
+      db.query(insertStaff, [userId, firstName, lastName, phone, role], (err) => {
+        if (err) return res.status(500).send('Staff insert error');
+        res.status(200).json({ success: true });
+      });
+    });
+  });
+});
+
+//edit staff (admin)
+app.put('/api/staff/:staffId', (req, res) => {
+  const { staffId } = req.params;
+  const { firstName, lastName, phone, role } = req.body;
+  const sql = 'UPDATE Staff SET FirstName = ?, LastName = ?, PhoneNumber = ?, Role = ? WHERE StaffID = ?';
+  db.query(sql, [firstName, lastName, phone, role, staffId], (err) => {
+    if (err) return res.status(500).send('Update error');
+    res.status(200).json({ success: true });
+  });
+});
+
+// Delete staff by ID(admin)
+app.delete('/api/staff/:staffId', (req, res) => {
+  const { staffId } = req.params;
+  db.query('DELETE FROM Staff WHERE StaffID = ?', [staffId], (err) => {
+    if (err) return res.status(500).send('Delete error');
+    res.status(200).json({ success: true });
   });
 });
 
