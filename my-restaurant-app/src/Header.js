@@ -32,8 +32,12 @@ function Header() {
           <ul className="navbar-nav">
             <li className="nav-item px-3"><Link className="nav-link" to="/menu">Menu</Link></li>
             <li className="nav-item px-3"><a className="nav-link" href="#locations">Locations</a></li>
-            <li className="nav-item px-3"><Link className="nav-link" to="/order">Order</Link></li>
-            <li className="nav-item px-3"><Link className="nav-link" to="/reservation">Reservations</Link></li>
+            {userRole !== 'Staff' && userRole !== 'Admin' &&(
+              <>
+                <li className="nav-item px-3"><Link className="nav-link" to="/order">Order</Link></li>
+                <li className="nav-item px-3"><Link className="nav-link" to="/reservation">Reservations</Link></li>
+              </>
+            )}
             {isLoggedIn && userRole === 'Customer' && (
               <li className="nav-item px-3">
                 <Link className="nav-link" to="/my-orders">My Orders</Link>
