@@ -53,6 +53,11 @@ function Header() {
                 <Link className="nav-link" to="/kitchen-orders">Orders</Link>
               </li>
             )}
+            {isLoggedIn && userRole === 'FrontOfHouse' && (
+              <li className="nav-item px-3">
+                <Link className="nav-link" to="/staff-reservations">Reservations</Link>
+              </li>
+            )}
             <li className="nav-item px-3"><a className="nav-link" href="#about">About Us</a></li>
           </ul>
         </div>

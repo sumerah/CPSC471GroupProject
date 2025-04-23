@@ -538,12 +538,53 @@ app.get('/api/kitchen/orders', (req, res) => {
   });
 });
 
-// Update order status
+// Update order status (kitchen staff)
 app.put('/api/kitchen/orders/:orderId', (req, res) => {
   const { orderId } = req.params;
   db.query('UPDATE Orders SET Status = "Completed" WHERE OrderID = ?', [orderId], err => {
     if (err) return res.status(500).send('Failed to update status');
     res.json({ success: true });
+  });
+});
+
+// Get all reservations (for FrontOfHouse staff)
+app.get('/api/staff/reservations', (req, res) => {
+  const sql = `
+    SELECT r.ReservationID, r.ReservationDate, r.ReservationTime, r.NumberOfGuests,
+           c.FirstName, c.LastName, c.PhoneNumber
+    FROM Reservations r
+    JOIN Customers c ON r.CustomerID = c.CustomerID
+    ORDER BY r.ReservationDate DESC, r.ReservationTime DESC
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Reservation fetch error:', err);
+      return res.status(500).send('Database error');
+    }
+
+    res.json(results);
+  });
+});
+
+// Update a reservation
+app.put('/api/staff/reservations/:id', (req, res) => {
+  const { id } = req.params;
+  const { date, time, guests } = req.body;
+
+  const sql = `
+    UPDATE Reservations
+    SET ReservationDate = ?, ReservationTime = ?, NumberOfGuests = ?
+    WHERE ReservationID = ?
+  `;
+
+  db.query(sql, [date, time, guests, id], (err) => {
+    if (err) {
+      console.error('Reservation update error:', err);
+      return res.status(500).send('Database error');
+    }
+
+    res.status(200).json({ success: true });
   });
 });
 
