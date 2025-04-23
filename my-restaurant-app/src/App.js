@@ -21,6 +21,7 @@ import CheckoutPage from './Checkout';
 import MyOrdersPage from './MyOrders';
 import StaffPage from './Staff';
 import ProfilePage from './Profile';
+import KitchenOrders from './KitchenOrders';
 
 
 function Home() {
@@ -85,6 +86,7 @@ function App() {
         <Route path="/my-orders" element={<MyOrdersPage />} />
         <Route path="/staff" element={<StaffPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/kitchen-orders" element={<KitchenOrders />} />
       </Routes>
     </Router>
   );

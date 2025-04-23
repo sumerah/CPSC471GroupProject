@@ -70,12 +70,33 @@ app.post('/api/login', (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.PasswordHash);
     if (!passwordMatch) return res.status(401).send('Incorrect password');
 
-    res.status(200).json({
-      success: true,
-      message: 'Login successful',
-      userId: user.UserID,
-      role: user.Role
-    });
+    // If staff, look up role from Staff table
+    if (user.Role === 'Staff') {
+      const staffSql = 'SELECT Role FROM Staff WHERE UserID = ?';
+      db.query(staffSql, [user.UserID], (err, staffResult) => {
+        if (err || staffResult.length === 0) {
+          console.error('Staff role fetch error:', err);
+          return res.status(500).send('Login failed');
+        }
+
+        const staffRole = staffResult[0].Role; // e.g., 'KitchenStaff'
+        return res.status(200).json({
+          success: true,
+          message: 'Login successful',
+          userId: user.UserID,
+          role: staffRole
+        });
+      });
+
+    } else {
+      // Non-staff (Admin or Customer)
+      res.status(200).json({
+        success: true,
+        message: 'Login successful',
+        userId: user.UserID,
+        role: user.Role
+      });
+    }
   });
 });
 
@@ -473,6 +494,57 @@ app.put('/api/users/:userId', (req, res) => {
   };
 
   updateUser();
+});
+
+
+// Get all pending orders with items
+app.get('/api/kitchen/orders', (req, res) => {
+  const sql = `
+    SELECT o.OrderID, o.OrderDate, o.Status, c.FirstName, c.LastName,
+           mi.ItemName, od.Quantity
+    FROM Orders o
+    JOIN Customers c ON o.CustomerID = c.CustomerID
+    JOIN OrderDetails od ON o.OrderID = od.OrderID
+    JOIN MenuItems mi ON od.ItemID = mi.ItemID
+    WHERE o.Status = 'Pending'
+    ORDER BY o.OrderDate DESC
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching kitchen orders:', err);
+      return res.status(500).send('Error');
+    }
+
+    // Group by OrderID
+    const orders = {};
+    results.forEach(row => {
+      if (!orders[row.OrderID]) {
+        orders[row.OrderID] = {
+          orderId: row.OrderID,
+          customerName: `${row.FirstName} ${row.LastName}`,
+          orderDate: row.OrderDate,
+          status: row.Status,
+          items: []
+        };
+      }
+      orders[row.OrderID].items.push({
+        name: row.ItemName,
+        quantity: row.Quantity
+      });
+    });
+
+    res.json(Object.values(orders));
+  });
+});
+
+// Update order status
+app.put('/api/kitchen/orders/:orderId', (req, res) => {
+  const { orderId } = req.params;
+  db.query('UPDATE Orders SET Status = "Completed" WHERE OrderID = ?', [orderId], err => {
+    if (err) return res.status(500).send('Failed to update status');
+    res.json({ success: true });
+  });
 });
 
 app.listen(5000, () => {

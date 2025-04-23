@@ -32,7 +32,7 @@ function Header() {
           <ul className="navbar-nav">
             <li className="nav-item px-3"><Link className="nav-link" to="/menu">Menu</Link></li>
             <li className="nav-item px-3"><a className="nav-link" href="#locations">Locations</a></li>
-            {userRole !== 'Staff' && userRole !== 'Admin' &&(
+            {userRole !== 'KitchenStaff' && userRole !== 'FrontOfHouse' && userRole !== 'Admin' &&(
               <>
                 <li className="nav-item px-3"><Link className="nav-link" to="/order">Order</Link></li>
                 <li className="nav-item px-3"><Link className="nav-link" to="/reservation">Reservations</Link></li>
@@ -46,6 +46,11 @@ function Header() {
             {isLoggedIn && userRole === 'Admin' && (
               <li className="nav-item px-3">
                 <Link className="nav-link" to="/staff">Staff</Link>
+              </li>
+            )}
+            {isLoggedIn && userRole === 'KitchenStaff' && (
+              <li className="nav-item px-3">
+                <Link className="nav-link" to="/kitchen-orders">Orders</Link>
               </li>
             )}
             <li className="nav-item px-3"><a className="nav-link" href="#about">About Us</a></li>
